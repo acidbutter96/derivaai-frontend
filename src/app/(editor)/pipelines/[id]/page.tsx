@@ -15,7 +15,15 @@ export async function generateMetadata({ params }: PageProps<"/pipelines/[id]">)
   return { title: pipeline?.name ?? "Pipeline" };
 }
 
-export default async function PipelineEditorPage({ params }: PageProps<"/pipelines/[id]">) {
+export default function PipelineEditorPage({ params }: PageProps<"/pipelines/[id]">) {
+  return (
+    <Suspense>
+      <PipelineEditor params={params} />
+    </Suspense>
+  );
+}
+
+async function PipelineEditor({ params }: { params: PageProps<"/pipelines/[id]">["params"] }) {
   const { id } = await params;
   const pipeline = await getPipeline(id);
   if (!pipeline) notFound();
